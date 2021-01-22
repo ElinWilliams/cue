@@ -1,61 +1,77 @@
 <style>
-  
+  #fixation_div{
+    font-size: 100px;
+  }
+  #fixation_div{
+    display: none;
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin:auto;
+    width:100;
+    height:100;
+  } 
+  #Image1,
+  #Noise1,
+  #Image2,
+  #Noise2{
+    display: none;
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin:auto;
+    width:600;
+    height:600;
+  }
 </style>
 
+<div id = "fixation_div">+</div>
 
+<img id = "Image1" src='../User/Stimuli/{{Image1}}'>
+<img id = "Noise1" src='../User/Stimuli/{{Noise1}}'>
+<img id = "Image2" src='../User/Stimuli/{{Image2}}'>
+<img id = "Noise2" src='../User/Stimuli/{{Noise2}}'>
 
-<img src='../User/Stimuli/{{Image1}}'>
-<img src='../User/Stimuli/{{Image2}}'>
+<input type='hidden' name='interacting' id='keyboard_response'/>
 
-<div id = 'this_image'></div>
 <script>
-  
-var conditions_array = [
-  'head',
-  'body',
-  'both_cong',
-  'both_incong'
-];
+Trial.set_timer(function(){
+  $("#fixation_div").show();
+  setTimeout(function(){
+    $("#fixation_div").hide(); 
+    $("#Image1").show();  
+    setTimeout(function(){
+      $("#Image1").hide(); 
+      $("#Noise1").show(); 
+      setTimeout(function(){
+        $("#Noise1").hide(); 
+        $("#Image2").show();
+        setTimeout(function(){
+          $("#Image2").hide();
+          $("#Noise2").show();
+          setTimeout(function(){
+            $("#Noise2").hide();
+            $(window).bind('keydown', function(event) {
+              switch (String.fromCharCode(event.which).toLowerCase()) {
+                case 'y':
+                case 'n':
+                  $("#keyboard_response").val(String.fromCharCode(event.which).toLowerCase());
+                  Trial.submit();
+                  break;
+              }
+            });
+          },500);            
+        },500);
+      },500);
+    },500);
+  },500);
+},500)  
 
 
-
-var rotation_array = [
-  -30,
-  -25,
-  -20,
-  -15,
-  -10
-  -5,
-  0,
-  5,
-  10,
-  15,
-  20,
-  25,
-  30
-];
-
-responses_objects = {
-  'head': {
-    stepwise_complete: false,
-    'responses': []
-  },
-  'body': {
-    stepwise_complete: false,
-    'responses': []
-  },
-  'both_cong': {
-  stepwise_complete: false,
-  'responses': []
-  },
-  'both_incong': {
-    stepwise_complete: false,
-    'responses': []
-  }
-}
-
-var item = rotation_array[Math.floor(Math.random() * rotation_array.length)];
-$('#this_image').html(item);
 
 
     
